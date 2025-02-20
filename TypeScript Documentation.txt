@@ -1,0 +1,167 @@
+Pre-requisite:
+1. "npm create vite@latest ."
+2. choose "React" for framework
+3. choose "TypeScript" for variant
+4. to install: "npm install" to install all the packages that are inside json
+5. ensure vite is installed: "npm install vite --save-dev"
+5. once done, run "npm run dev"
+
+
+-----------------------------------------------------------------------------
+Configuration to avoid getting error when variables are not declared:
+1. go to eslint.config.js and paste the code below:
+"
+  rules: {
+    ...require('eslint-plugin-react-hooks').configs.recommended.rules,
+    'react-refresh/only-export-components': [
+      'warn',
+      { allowConstantExport: true },
+    ],
+    '@typescript-eslint/no-unused-vars': 'off' // Disable unused variable errors
+  },
+"
+
+
+------------------------------------------------------------------------------
+
+STRING
+"
+  let name: string = "Jasmin";
+"
+
+
+NUMBER
+"
+  let age: number = 22;
+"
+
+
+BOOLEAN
+"
+  let isMarried: boolean = false;
+"
+
+
+ARRAY
+"
+  let ages: number[] = [1, 2, 3, 4, 5];
+  let names: string[] = ["name1", "name2", "name3", "name4"];
+"
+
+
+NUMBER
+"
+  let age: number = 22;
+"
+
+
+BOOLEAN
+"
+  let isMarried: boolean = false;
+"
+
+
+------------------------------------------------------------------------------
+What is TypeScript?
+- It's just a javascript code, we just add type system in it.
+
+What is a type?
+- It's something we specify to a variable to avoid any errors.
+
+for example:
+"
+  let name: string = "Jasmin";
+"
+// specified here is that it's a string so when you put there a number, it will show some error because number is not the type that we specified
+
+
+example 2:
+"
+  let age: number = 22;
+"
+// specified here is that it's a number so when you put there a string, it will show some error because string is not the type that we specified
+
+
+example 3:
+"
+  let isMarried: boolean = false;
+"
+// specified here is that it's a boolean so when you put there a string or even number, it will show some error because neither string nor number is the type that we specified
+
+
+example 4:
+"
+  let ages: number[] = [1,2,3,4];
+"
+// specified here is that it's an array that only contains the value of numbers so it's not accespting any strings. 
+
+// if you want an array that consist of string values, you should try the code below:
+"
+  let ages: string[] = ["name","name","adf","werw"];
+"
+
+// if you want the array to any hold of data types then you can use "any" like this:
+"
+  let ages: any[] = [12,"name","adf",true];
+"
+
+
+
+How about for objects?
+- There is this thing called "interface", basically what it does is it list the object properties and then puts types in them like the example below:
+
+"
+  interface PersonProp {
+    name: string;
+    age: number;
+    isMarried: boolean;
+  }
+"
+
+// as you can see, there are properties name, age, isMarried, and we specify their types.
+
+
+What is a prop?
+- Prop is like the arguments that we pass in order to display the data.
+  
+  example: name, age, isMarried are the props because they are the properties that we will pass in order to display the data
+
+
+How do we assign this Props?
+Take a look at the code below:
+
+"
+  interface PersonProp {
+    name: string;
+    age: number;
+    isMarried: boolean;
+  }
+
+  // pass the data here, basically those that are inside the props
+  const Person: React.FC<PersonProp> = ({ name, age, isMarried }) => {
+    return (
+      <div>
+        //data here
+      </div>
+    );
+  };
+"
+
+
+How do we display the data?
+"
+  const Person: React.FC<PersonProp> = ({ name, age, isMarried }) => {
+    return (
+      <div>
+        <p>Name: {name}</p>
+        <p>Age: {age}</p>
+        <p>Married: {isMarried ? "Married" : "Not married"}</p>
+      </div>
+    );
+  };
+"
+
+It's output will be:
+"
+
+"
