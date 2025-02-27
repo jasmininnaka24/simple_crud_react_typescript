@@ -1,43 +1,35 @@
-import React, { createContext, ReactNode, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 
 interface User {
-  id?: number;
+  id: number;
   name: string;
   age: number;
   isMarried: boolean;
 }
 
 interface UserContextType {
-  users: User[] | [];
+  users: User[] | null;
   setUsers: React.Dispatch<React.SetStateAction<User[]>>;
   fetchUsers: () => void;
   addUser: (user: User) => void;
-  updateUser: (id: number, updatedUserData: User) => void;
+  updateUser: (id: number, updateUser: User) => void;
   deleteUser: (id: number) => void;
 }
 
 const userContext = createContext<UserContextType | undefined>(undefined);
 
 interface Props {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
-const UserContextProvider = (props: Props) => {
+export const UserContextProvider = (props: Props) => {
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
     setUsers([
-      {
-        name: "Sarhan",
-        age: 23,
-        isMarried: false,
-      },
-      {
-        name: "Jasmin",
-        age: 22,
-        isMarried: false,
-      },
+      { id: 1, name: "Sarhan", age: 23, isMarried: false },
+      { id: 2, name: "Jasmin", age: 22, isMarried: false },
     ]);
   }, []);
 
@@ -48,13 +40,10 @@ const UserContextProvider = (props: Props) => {
       if (response.status === 200) {
         setUsers(response.data);
       } else {
-        console.error("Failed to fetch the users data: ", response.statusText);
+        console.error("Failed to get the users' data: ", response.statusText);
       }
     } catch (error) {
-      console.error(
-        "An error has occured while fetching the users data: ",
-        error
-      );
+      console.error("An error has occured while fetching users' data: ", error);
     }
   };
 
@@ -67,14 +56,12 @@ const UserContextProvider = (props: Props) => {
       });
 
       if (response.status === 200) {
-        const addedUser = response.data as User;
-        setUsers((prevUsers) => [...prevUsers, addedUser]);
+        setUsers((prevUsers) => [...prevUsers, response.data]);
       } else {
-        console.error("Failed to add a new user: ", response.statusText);
-        console.error("Failed to add a new user: ", response.statusText);
+        console.error("Failed to add the user's data: ", response.statusText);
       }
     } catch (error) {
-      console.error("An error has occured while adding a new user: ", error);
+      console.error("An error has occured while adding user's data: ", error);
     }
   };
 
@@ -92,7 +79,10 @@ const UserContextProvider = (props: Props) => {
           prevUsers.map((user) => (user.id === id ? updatedUserDataRes : user))
         );
       } else {
-        console.error("Failed to update user's data: ", response.statusText);
+        console.error(
+          "Failed to update the user's data: ",
+          response.statusText
+        );
       }
     } catch (error) {
       console.error("An error has occured while updating user's data: ", error);
@@ -106,7 +96,10 @@ const UserContextProvider = (props: Props) => {
       if (response.status === 200) {
         setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
       } else {
-        console.error("Failed to delete user's data: ", response.statusText);
+        console.error(
+          "Failed to delete the user's data: ",
+          response.statusText
+        );
       }
     } catch (error) {
       console.error("An error has occured while deleting user's data: ", error);
@@ -116,6 +109,18 @@ const UserContextProvider = (props: Props) => {
   return (
     <userContext.Provider
       value={{ users, setUsers, fetchUsers, addUser, updateUser, deleteUser }}
-    ></userContext.Provider>
+    >
+      {props.children}
+    </userContext.Provider>
   );
+};
+
+export const useUserContextFunc = () => {
+  const context = useContext(userContext);
+
+  if (!context) {
+    throw new Error("useUserContextFunc must be used within userContext");
+  }
+
+  return context;
 };

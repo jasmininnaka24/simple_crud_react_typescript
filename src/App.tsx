@@ -1,15 +1,22 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import MainApp from "./pages/MainApp";
-import "./App.css";
+import { UserContextProvider } from "./context/UserContext";
 
-function App() {
+import MainApp from "./pages/MainApp";
+import Users from "./pages/user";
+
+const App = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<MainApp />} />
-      </Routes>
-    </Router>
+    <>
+      <UserContextProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<MainApp />} />
+            <Route path="/user" element={<Users />} />
+          </Routes>
+        </Router>
+      </UserContextProvider>
+    </>
   );
-}
+};
 
 export default App;
