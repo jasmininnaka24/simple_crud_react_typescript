@@ -2,7 +2,6 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 
 interface User {
-  id: number;
   name: string;
   age: number;
   isMarried: boolean;
@@ -28,8 +27,8 @@ export const UserContextProvider = (props: Props) => {
 
   useEffect(() => {
     setUsers([
-      { id: 1, name: "Sarhan", age: 23, isMarried: false },
-      { id: 2, name: "Jasmin", age: 22, isMarried: false },
+      { name: "Sarhan", age: 23, isMarried: false },
+      { name: "Jasmin", age: 22, isMarried: false },
     ]);
   }, []);
 
@@ -49,17 +48,18 @@ export const UserContextProvider = (props: Props) => {
 
   const addUser = async (user: User) => {
     try {
-      const response = await axios.post("/api", user, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      console.log(user);
+      // const response = await axios.post("/api", user, {
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      // });
 
-      if (response.status === 200) {
-        setUsers((prevUsers) => [...prevUsers, response.data]);
-      } else {
-        console.error("Failed to add the user's data: ", response.statusText);
-      }
+      // if (response.status === 200) {
+      //   setUsers((prevUsers) => [...prevUsers, response.data]);
+      // } else {
+      //   console.error("Failed to add the user's data: ", response.statusText);
+      // }
     } catch (error) {
       console.error("An error has occured while adding user's data: ", error);
     }
@@ -75,9 +75,9 @@ export const UserContextProvider = (props: Props) => {
 
       if (response.status === 200) {
         const updatedUserDataRes = response.data as User;
-        setUsers((prevUsers) =>
-          prevUsers.map((user) => (user.id === id ? updatedUserDataRes : user))
-        );
+        // setUsers((prevUsers) =>
+        //   prevUsers.map((user) => (user.id === id ? updatedUserDataRes : user))
+        // );
       } else {
         console.error(
           "Failed to update the user's data: ",
@@ -94,7 +94,7 @@ export const UserContextProvider = (props: Props) => {
       const response = await axios.delete(`/api/${id}`);
 
       if (response.status === 200) {
-        setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
+        // setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
       } else {
         console.error(
           "Failed to delete the user's data: ",

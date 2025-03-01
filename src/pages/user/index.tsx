@@ -3,7 +3,6 @@ import DisplayUser from "./display-user";
 import { useLocation } from "react-router-dom";
 
 interface UserDataType {
-  id: number;
   name: string;
   age: number;
   isMarried: boolean;
@@ -11,9 +10,9 @@ interface UserDataType {
 
 export const User: React.FC = () => {
   const location = useLocation();
-  const { id, name, age, isMarried } = location.state as UserDataType;
+  const { name, age, isMarried } = location.state as UserDataType;
 
-  return <DisplayUser id={id} name={name} age={age} isMarried={isMarried} />;
+  return <DisplayUser name={name} age={age} isMarried={isMarried} />;
 };
 
 export default User;

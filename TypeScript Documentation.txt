@@ -1,9 +1,10 @@
 Pre-requisite:
-1. "npm create vite@latest ."
+1. "npm create vite@latest ." or instead of latest u can simply put 6.1.0
 2. choose "React" for framework
 3. choose "TypeScript" for variant
 4. to install: "npm install" to install all the packages that are inside json
 5. ensure vite is installed: "npm install vite --save-dev"
+6. install: "npm instll types", "npm install react-router-dom @types/react-router-dom", and "npm install axios"
 5. once done, run "npm run dev"
 
 
