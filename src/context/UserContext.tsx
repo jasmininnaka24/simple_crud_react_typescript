@@ -66,44 +66,46 @@ export const UserContextProvider = (props: Props) => {
   };
 
   const updateUser = async (id: number, updatedUserData: User) => {
-    try {
-      const response = await axios.put(`/api/${id}`, updatedUserData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+    // try {
+    //   const response = await axios.put(`/api/${id}`, updatedUserData, {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   });
+    //   if (response.status === 200) {
+    //     const updatedUserDataRes = response.data;
+    //     // setUsers((prevUsers) =>
+    //     //   prevUsers.map((user) => (user.id === id ? updatedUserDataRes : user))
+    //     // );
+    //   } else {
+    //     console.error(
+    //       "Failed to update the user's data: ",
+    //       response.statusText
+    //     );
+    //   }
+    // } catch (error) {
+    //   console.error("An error has occured while updating user's data: ", error);
+    // }
 
-      if (response.status === 200) {
-        const updatedUserDataRes = response.data as User;
-        // setUsers((prevUsers) =>
-        //   prevUsers.map((user) => (user.id === id ? updatedUserDataRes : user))
-        // );
-      } else {
-        console.error(
-          "Failed to update the user's data: ",
-          response.statusText
-        );
-      }
-    } catch (error) {
-      console.error("An error has occured while updating user's data: ", error);
-    }
+    console.log("updated", updatedUserData);
   };
 
   const deleteUser = async (id: number) => {
-    try {
-      const response = await axios.delete(`/api/${id}`);
+    // try {
+    //   const response = await axios.delete(`/api/${id}`);
 
-      if (response.status === 200) {
-        // setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
-      } else {
-        console.error(
-          "Failed to delete the user's data: ",
-          response.statusText
-        );
-      }
-    } catch (error) {
-      console.error("An error has occured while deleting user's data: ", error);
-    }
+    //   if (response.status === 200) {
+    //     // setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
+    //   } else {
+    //     console.error(
+    //       "Failed to delete the user's data: ",
+    //       response.statusText
+    //     );
+    //   }
+    // } catch (error) {
+    //   console.error("An error has occured while deleting user's data: ", error);
+    // }
+    console.log("deleted");
   };
 
   return (

@@ -1,5 +1,5 @@
 import React from "react";
-import DisplayUser from "./display-user";
+import DisplayUser from "./DisplayUser";
 import { useLocation } from "react-router-dom";
 
 interface UserDataType {

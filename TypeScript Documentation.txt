@@ -5,8 +5,27 @@ Pre-requisite:
 4. to install: "npm install" to install all the packages that are inside json
 5. ensure vite is installed: "npm install vite --save-dev"
 6. install: "npm instll types", "npm install react-router-dom @types/react-router-dom", and "npm install axios"
-5. once done, run "npm run dev"
+7. once done, run "npm run dev"
+8. To install tailwind: 
+ - "npm install -D tailwindcss@3.4.1 postcss autoprefixer"
+ - "npx tailwindcss init -p"
+ - "/** @type {import('tailwindcss').Config} */
+    export default {
+      content: [
+        "./index.html",
+        "./src/**/*.{js,ts,jsx,tsx}"
+      ],
+      theme: {
+        extend: {},
+      },
+      plugins: [],
+    }"
 
+- Add to directives either in index.app.main.css
+  "@tailwind base;
+   @tailwind components;
+   @tailwind utilities;
+  "
 
 -----------------------------------------------------------------------------
 Configuration to avoid getting error when variables are not declared:
