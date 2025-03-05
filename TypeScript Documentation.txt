@@ -4,7 +4,7 @@ Pre-requisite:
 3. choose "TypeScript" for variant
 4. to install: "npm install" to install all the packages that are inside json
 5. ensure vite is installed: "npm install vite --save-dev"
-6. install: "npm instll types", "npm install react-router-dom @types/react-router-dom", and "npm install axios"
+6. install: "npm install types", "npm install react-router-dom @types/react-router-dom", and "npm install axios"
 7. once done, run "npm run dev"
 8. To install tailwind: 
  - "npm install -D tailwindcss@3.4.1 postcss autoprefixer"
