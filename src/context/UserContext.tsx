@@ -11,7 +11,6 @@ export interface UserDataType {
 
 interface UserContextType {
   users: UserDataType[] | undefined;
-  setUsers: React.Dispatch<React.SetStateAction<UserDataType[]>>;
   fetchUsers: () => void;
   addUser: (user: UserDataType) => void;
   updateUser: (id: number, user: UserDataType) => void;
@@ -51,7 +50,7 @@ export const UserContextProvider = ({
     },
   });
 
-  // Update User Mutation (Fixed Parameter Issue)
+  // Update User Mutation
   const updateUserMutation = useMutation({
     mutationFn: async ({ id, user }: { id: number; user: UserDataType }) => {
       const response = await axios.put(`/api/${id}`, user, {
@@ -78,11 +77,10 @@ export const UserContextProvider = ({
     <UserContext.Provider
       value={{
         users,
-        setUsers: () => {}, // Placeholder, since React Query manages state
         fetchUsers,
         addUser: addUserMutation.mutate,
         updateUser: (id: number, user: UserDataType) =>
-          updateUserMutation.mutate({ id, user }), // Fixed function signature
+          updateUserMutation.mutate({ id, user }),
         deleteUser: deleteUserMutation.mutate,
       }}
     >
