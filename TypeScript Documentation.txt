@@ -27,6 +27,10 @@ Pre-requisite:
    @tailwind utilities;
   "
 
+9. Install React Query:
+- npm install @tanstack/react-query
+- npm install @tanstack/react-query-devtools
+
 -----------------------------------------------------------------------------
 Configuration to avoid getting error when variables are not declared:
 1. go to eslint.config.js and paste the code below:

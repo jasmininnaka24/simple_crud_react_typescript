@@ -1,21 +1,25 @@
 import { Link } from "react-router-dom";
 import useUserHook from "../../hooks/useUserHook";
+import AddUser from "./AddUser";
 
-const UserManagement = () => {
+const DisplayUsersData = () => {
   const {
     users,
     editingUser,
     dataToUpdate,
     handleNavigate,
-    handleClickEdit,
+    handleEditClick,
     handleChange,
     handleSave,
-    handleDelete,
     handleCancel,
+    handleDelete,
   } = useUserHook();
 
   return (
     <div>
+      <AddUser />
+      <br />
+      <br />
       <table className="w-full">
         <thead>
           <th className="py-3 border">Name</th>
@@ -24,7 +28,7 @@ const UserManagement = () => {
           <th className="py-3 border">Profile Link</th>
           <th className="py-3 border">Page Link</th>
           <th className="py-3 border" colSpan={2}>
-            Action
+            Actions
           </th>
         </thead>
         <tbody>
@@ -33,17 +37,20 @@ const UserManagement = () => {
               <tr
                 key={id}
                 className={`text-center transition ${
-                  editingUser === id ? "bg-yellow-100 shadow-md" : ""
-                }}`}
+                  editingUser === id
+                    ? "bg-yellow-100 shadow-md border-2 border-gray-500"
+                    : ""
+                }`}
               >
                 <td className="py-3 border">
                   {editingUser === id ? (
                     <input
-                      className="text-center bg-transparent w-full outline-none"
-                      onChange={handleChange}
                       type="text"
                       name="name"
+                      placeholder="Name"
+                      onChange={handleChange}
                       value={dataToUpdate.name}
+                      className="text-center outline-none w-full bg-transparent"
                     />
                   ) : (
                     name
@@ -52,11 +59,12 @@ const UserManagement = () => {
                 <td className="py-3 border">
                   {editingUser === id ? (
                     <input
-                      className="text-center bg-transparent w-full outline-none"
-                      onChange={handleChange}
                       type="number"
                       name="age"
+                      placeholder="Age"
+                      onChange={handleChange}
                       value={dataToUpdate.age}
+                      className="text-center outline-none w-full bg-transparent"
                     />
                   ) : (
                     age
@@ -66,9 +74,9 @@ const UserManagement = () => {
                   {editingUser === id ? (
                     <select
                       name="isMarried"
-                      className="text-center bg-transparent w-full outline-none"
                       onChange={handleChange}
                       value={dataToUpdate.isMarried.toString()}
+                      className="bg-transparent"
                     >
                       <option value="false">False</option>
                       <option value="true">True</option>
@@ -79,52 +87,50 @@ const UserManagement = () => {
                     "No"
                   )}
                 </td>
-                <td className="py-3 border">
-                  <Link
-                    className="text-blue-600"
-                    to={"/user"}
-                    state={{ id, name, age, isMarried }}
-                  >
+                <td className="py-3 border text-blue-600">
+                  <Link to={"/user"} state={{ id, name, age, isMarried }}>
                     {name}'s Profile
                   </Link>
                 </td>
                 <td className="py-3 border">
                   <button
-                    onClick={(e) => handleNavigate(e, id, name, age, isMarried)}
-                    className="bg-blue-600 text-white px-3 py-1 rounded"
+                    onClick={() => handleNavigate({ id, name, age, isMarried })}
+                    className="rounded bg-blue-600 text-white px-3 py-1"
                   >
                     {name}'s Page
                   </button>
                 </td>
-                <td className="border">
+                <td className="py-3 border">
                   {editingUser === id ? (
                     <button
-                      onClick={() => handleSave(id ? id : 0, dataToUpdate)}
-                      className="bg-green-500 text-white rounded w-20 py-1"
+                      onClick={() => handleSave(dataToUpdate)}
+                      className="rounded bg-green-500 text-white px-3 py-1"
                     >
                       Save
                     </button>
                   ) : (
                     <button
-                      onClick={() => handleClickEdit(id, name, age, isMarried)}
-                      className="bg-yellow-300 text-gray-800 rounded w-20 py-1"
+                      onClick={() =>
+                        handleEditClick({ id, name, age, isMarried })
+                      }
+                      className="rounded bg-yellow-300 text-gray-800 px-3 py-1"
                     >
                       Edit
                     </button>
                   )}
                 </td>
-                <td className="border">
+                <td className="py-3 border">
                   {editingUser === id ? (
                     <button
                       onClick={handleCancel}
-                      className="bg-red-400 text-white rounded w-20 py-1"
+                      className="rounded bg-red-400 text-white px-3 py-1"
                     >
                       Cancel
                     </button>
                   ) : (
                     <button
-                      onClick={() => handleDelete(id ?? 0)}
-                      className="bg-red-400 text-white rounded w-20 py-1"
+                      onClick={() => handleDelete(id)}
+                      className="rounded bg-red-400 text-white px-3 py-1"
                     >
                       Delete
                     </button>
@@ -134,7 +140,7 @@ const UserManagement = () => {
             ))
           ) : (
             <tr>
-              <td colSpan={7}>No Record Found</td>
+              <td colSpan={7}></td>
             </tr>
           )}
         </tbody>
@@ -143,4 +149,4 @@ const UserManagement = () => {
   );
 };
 
-export default UserManagement;
+export default DisplayUsersData;

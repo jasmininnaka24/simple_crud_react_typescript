@@ -1,9 +1,9 @@
-import UserManagement from "./UserManagement";
+import DisplayUsersData from "./DisplayUsersData";
 
 const UserIndex = () => {
   return (
     <div>
-      <UserManagement />
+      <DisplayUsersData />
     </div>
   );
 };

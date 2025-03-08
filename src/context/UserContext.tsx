@@ -1,130 +1,100 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
-export interface User {
+export interface UserDataType {
   id: number;
   name: string;
   age: number;
   isMarried: boolean;
 }
 
-interface AddUser {
-  name: string;
-  age: number;
-  isMarried: boolean;
-}
-
 interface UserContextType {
-  users: User[] | null;
-  setUsers: React.Dispatch<React.SetStateAction<User[]>>;
+  users: UserDataType[] | undefined;
+  setUsers: React.Dispatch<React.SetStateAction<UserDataType[]>>;
   fetchUsers: () => void;
-  addUser: (user: AddUser) => void;
-  updateUser: (id: number, updatedUserData: User) => void;
+  addUser: (user: UserDataType) => void;
+  updateUser: (id: number, user: UserDataType) => void;
   deleteUser: (id: number) => void;
 }
 
-const userContext = createContext<UserContextType | undefined>(undefined);
+export const UserContext = createContext<UserContextType | undefined>(
+  undefined
+);
 
-interface Prop {
+export const UserContextProvider = ({
+  children,
+}: {
   children: React.ReactNode;
-}
-export const UserContextProvider = (prop: Prop) => {
-  const [users, setUsers] = useState<User[] | []>([]);
+}) => {
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    setUsers([
-      { id: 1, name: "Sarhan", age: 23, isMarried: false },
-      { id: 2, name: "Jasmin", age: 22, isMarried: false },
-    ]);
-  }, []);
-
-  const fetchUsers = async () => {
-    try {
+  // Fetch Users
+  const { data: users, refetch: fetchUsers } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
       const response = await axios.get("/api");
+      return response.data;
+    },
+  });
 
-      if (response.status === 200) {
-        setUsers(response.data);
-      } else {
-        console.error("Failed to fetch users data: ", response.statusText);
-      }
-    } catch (error) {
-      console.error("An error has occured while fetching the data: ", error);
-    }
-  };
+  // Add User Mutation
+  const addUserMutation = useMutation({
+    mutationFn: async (user: UserDataType) => {
+      const response = await axios.post("/api", user, {
+        headers: { "Content-Type": "application/json" },
+      });
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+  });
 
-  const addUser = async (user: AddUser) => {
-    // try {
-    //   const response = await axios.put("/api", user, {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
+  // Update User Mutation (Fixed Parameter Issue)
+  const updateUserMutation = useMutation({
+    mutationFn: async ({ id, user }: { id: number; user: UserDataType }) => {
+      const response = await axios.put(`/api/${id}`, user, {
+        headers: { "Content-Type": "application/json" },
+      });
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+  });
 
-    //   if (response.status === 200) {
-    //     setUsers((prev) => [...prev, response.data]);
-    //   } else {
-    //     console.error("Failed to add user data: ", response.statusText);
-    //   }
-    // } catch (error) {
-    //   console.error("An error has occured while adding the data: ", error);
-    // }
-    console.log("Added");
-  };
-
-  const updateUser = async (id: number, updatedUserData: User) => {
-    // try {
-    //   const response = await axios.put(`/api/${id}`, updatedUserData, {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
-
-    //   if (response.status === 200) {
-    //     const updatedUserDataRes = response.data as User;
-    //     setUsers((prev) =>
-    //       prev.map((user) => (user.id === id ? updatedUserDataRes : user))
-    //     );
-    //   } else {
-    //     console.error("Failed to update user data: ", response.statusText);
-    //   }
-    // } catch (error) {
-    //   console.error("An error has occured while updating the data: ", error);
-    // }
-    setUsers((prev) =>
-      prev.map((user) => (user.id === id ? updatedUserData : user))
-    );
-  };
-
-  const deleteUser = async (id: number) => {
-    // try {
-    //   const response = await axios.delete(`/api/${id}`);
-
-    //   if (response.status === 200) {
-    //     setUsers((prev) => prev.filter((user) => user.id !== id));
-    //   } else {
-    //     console.error("Failed to update delete data: ", response.statusText);
-    //   }
-    // } catch (error) {
-    //   console.error("An error has occured while deleting the data: ", error);
-    // }
-    setUsers((prev) => prev.filter((user) => user.id !== id));
-  };
+  // Delete User Mutation
+  const deleteUserMutation = useMutation({
+    mutationFn: async (id: number) => {
+      await axios.delete(`/api/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+  });
 
   return (
-    <userContext.Provider
-      value={{ users, setUsers, fetchUsers, addUser, updateUser, deleteUser }}
+    <UserContext.Provider
+      value={{
+        users,
+        setUsers: () => {}, // Placeholder, since React Query manages state
+        fetchUsers,
+        addUser: addUserMutation.mutate,
+        updateUser: (id: number, user: UserDataType) =>
+          updateUserMutation.mutate({ id, user }), // Fixed function signature
+        deleteUser: deleteUserMutation.mutate,
+      }}
     >
-      {prop.children}
-    </userContext.Provider>
+      {children}
+    </UserContext.Provider>
   );
 };
 
 export const useUserContext = () => {
-  const context = useContext(userContext);
-
+  const context = useContext(UserContext);
   if (!context) {
-    throw new Error("useUserContext must be used within userContext");
+    throw new Error("useUserContext must be used within a UserContextProvider");
   }
-
   return context;
 };

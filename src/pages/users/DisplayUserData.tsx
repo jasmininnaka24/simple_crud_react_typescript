@@ -1,10 +1,8 @@
 import { useLocation } from "react-router-dom";
-import { User } from "../../context/UserContext";
-
+import { UserDataType } from "../../context/UserContext";
 const DisplayUserData = () => {
   const location = useLocation();
-  const { id, name, age, isMarried } = location.state as User;
-
+  const { id, name, age, isMarried } = location.state as UserDataType;
   return (
     <div>
       <p>ID: {id}</p>
