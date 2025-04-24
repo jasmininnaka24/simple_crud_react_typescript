@@ -21,7 +21,7 @@ Pre-requisite:
       plugins: [],
     }"
 
-- Add to directives either in index.app.main.css
+- Add to directives in index.css and app.css
   "@tailwind base;
    @tailwind components;
    @tailwind utilities;
