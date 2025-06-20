@@ -30,6 +30,7 @@ Pre-requisite:
 9. Install React Query:
 - npm install @tanstack/react-query
 - npm install @tanstack/react-query-devtools
+- npm install --save-dev @types/babel__traverse
 
 -----------------------------------------------------------------------------
 Configuration to avoid getting error when variables are not declared:
